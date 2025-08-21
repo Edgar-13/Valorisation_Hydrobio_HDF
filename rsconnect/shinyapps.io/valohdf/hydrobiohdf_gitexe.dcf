@@ -1,0 +1,10 @@
+name: hydrobiohdf_gitexe
+title:
+username: valohdf
+account: valohdf
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 15225928
+bundleId: 10795891
+url: https://valohdf.shinyapps.io/hydrobiohdf_gitexe/
+version: 1

@@ -1,0 +1,3 @@
+CODE_OPERATION;CODE_STATION;DATE;CODE_PAR;LIB_PAR;RESULTAT
+011000002023080113;01100000;01/08/2023;6951;Indice macroinvertébrés grands cours d'eau - 12 prélèvements;16
+011000002022090613;01100000;06/09/2022;6951;Indice macroinvertébrés grands cours d'eau - 12 prélèvements;16
