@@ -88,29 +88,20 @@ mod_synthese_toutes_stations_server <- function(id, stations, indices, choix_sta
             tabsetPanel(
               tabPanel(
                 title = "Qualité",
-                mod_hist_qualite_ui(ns("qualite"))
+                tags$div(
+                  class = "no-print",
+                  mod_hist_qualite_ui(ns("qualite"))
+                )
               ),
               tabPanel(
                 title = "Chroniques",
-                mod_hist_chroniques_ui(ns("chroniques"))
-              ),
-            ),
-            div(
-              style = "margin-top: 40px;",
-              h3("Glossaire"),
-              tags$ul(
-                tags$li(tags$b("EQR :"), " Ecological Quality Ratio (ratio de qualité écologique)"),
-                tags$li(tags$b("IBD :"), " Indice Biologique Diatomées"),
-                tags$li(tags$b("IBMR :"), " Indice Biologique Macrophyte en Rivière"),
-                tags$li(tags$b("IPR :"), " Indice Poissons Rivière"),
-                tags$li(tags$b("I2M2 :"), " Indice Invertébrés Multi-Métrique"),
-                tags$li(tags$b("IBG :"), " Indice Biologique Global"),
-                tags$li(tags$b("GCE :"), " Grands Cours d'Eau")
+                tags$div(
+                  class = "no-print",
+                  mod_hist_chroniques_ui(ns("chroniques"))
+                )
               )
             )
-
           )
-
         })
       }
     })

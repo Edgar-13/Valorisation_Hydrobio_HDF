@@ -17,11 +17,6 @@ required_packages <- c(
   "leaflet",
   "leaflet.extras")
 
-# Installer les packages manquants
-# installed_pkgs <- rownames(installed.packages())
-# for (pkg in required_packages) {
-#   if (!pkg %in% installed_pkgs) install.packages(pkg)
-# }
 
 # Charger tous les packages
 invisible(lapply(required_packages, library, character.only = TRUE))

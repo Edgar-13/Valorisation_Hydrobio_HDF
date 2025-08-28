@@ -131,7 +131,7 @@ mod_synthese_station_server <- function(id, resumes_listes, stations, regie, ind
 
             div(
               mod_chiffres_cles_station_ui(id = ns("chiffres_cles")),
-              div(class = "page-break"),
+              #div(class = "page-break"),
 
               div(class = "no-print",
               actionButton(ns("btn_afficher_fiche"), "Afficher fiche station"),

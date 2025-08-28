@@ -16,7 +16,7 @@
 mod_hist_qualite_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    plotly::plotlyOutput(ns("qualite"), height = "350px")
+    plotly::plotlyOutput(ns("qualite"), height = "450px")
   )
 }
 
@@ -38,9 +38,13 @@ mod_hist_qualite_server <- function(id, donnees_graphique){
     ns <- session$ns
 
     output$qualite <- plotly::renderPlotly({
+
+      zones <- session$userData$departements()
+
       plot_qualite(
         donnees_graphique,
-        interactive = FALSE
+        interactive = FALSE,
+        zones = zones
       )
     })
   })

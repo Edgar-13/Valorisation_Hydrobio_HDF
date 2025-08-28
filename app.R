@@ -1,8 +1,5 @@
 source("packages.R")
 
-# load("R:/ServicesRegionaux/Service_Connaissance/7-Laboratoire_hydrobiologie/Donnees/Syntheses_et_valorisation/Outil_valorisation_HB_HDF_2025/data_carte.rda", envir = .GlobalEnv)
-# load("R:/ServicesRegionaux/Service_Connaissance/7-Laboratoire_hydrobiologie/Donnees/Syntheses_et_valorisation/Outil_valorisation_HB_HDF_2025/data_hydrobio.rda", envir = .GlobalEnv)
-
 load("data/data_carte.rda", envir = .GlobalEnv)
 load("data/data_hydrobio.rda", envir = .GlobalEnv)
 
@@ -65,6 +62,7 @@ ui <- fluidPage(
                     bottom:0;
                     right:0;
                     padding:10px;
+                    z-index : -1;
                     width:200px;
                     '
         ),
@@ -113,7 +111,6 @@ ui <- fluidPage(
           ),
           choix_multiple = TRUE
         )
-        #div(class = "page-break")
       ),
 
       div(class = "no-print",
@@ -151,7 +148,9 @@ ui <- fluidPage(
                   width = 5,
                   mod_synthese_station_ui(id = "synthese_station")
                 )
-              )
+              ),
+              mod_afficher_glossaire_ui(id = "glossaire")
+
             ),
             tabPanel(
               title = "Taxons",
@@ -183,19 +182,17 @@ ui <- fluidPage(
     )
 
 server <- function(input, output, session) {
-  # Your application server logic
-
-  # Télécharge et charge dans l'espace de travail les données: "donnees_carte",
-  # "donnees_carte_taxons", "indices", "listes_taxo", "resumes_listes",
-  # "stations", "acronymes_indices", "date_donnees"
 
   mod_load_data_server("donnees")
-
-  #load_data_hydrobio()
 
   choix_departements <- mod_selecteur_server(id = "departements")
   choix_eqbs <- mod_selecteur_server(id = "eqb")
   choix_stations <- mod_regie_server(id = "regie", choix_eqb = choix_eqbs, choix_dep = choix_departements)
+
+  # sélecteur des départements
+  session$userData$departements <- mod_selecteur_server(id = "departements")
+  # sélecteur EQB
+  session$userData$eqb <- mod_selecteur_server(id = "eqb")
 
   station <- mod_carte_server(
     "carte",

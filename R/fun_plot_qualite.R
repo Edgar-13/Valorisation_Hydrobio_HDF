@@ -1,4 +1,3 @@
-
 #' Tracer un graphique de l'évolution de la qualité
 #'
 #' @param donnees_graphique Un data.frame ou objet sf contenant les données de qualité avec
@@ -25,11 +24,31 @@
 #' @importFrom plotly ggplotly layout add_annotations
 #' @importFrom sf st_drop_geometry
 #' @importFrom stringr str_split
-plot_qualite <- function(donnees_graphique, interactive = FALSE) {
+plot_qualite <- function(donnees_graphique, interactive = FALSE, zones) {
   if ("sf" %in% class(donnees_graphique))
     donnees_graphique <- donnees_graphique %>%
       sf::st_drop_geometry() %>%
       dplyr::as_tibble()
+
+  # Préparer le titre (zones)
+  # zones contient les codes sélectionnés
+  if (!is.null(zones) && length(zones) > 0) {
+    # récupérer tous les noms correspondant aux codes sélectionnés
+    noms_zones <- unlist(lapply(choix_departements, function(groupe) {
+      # inverser nom -> code pour récupérer les codes correspondants
+      names(groupe)[groupe %in% zones]
+    }))
+    # supprimer éventuels NULL ou NA
+    noms_zones <- noms_zones[!is.na(noms_zones)]
+    titre_zone <- paste(noms_zones, collapse = ", ")
+  } else {
+    titre_zone <- "Toutes les stations"
+  }
+
+  # Préparer les indicateurs
+  indicateurs <- donnees_graphique$libelle_support %>%
+    unique() %>%
+    paste(collapse = ", ")
 
   PlotQualite <- donnees_graphique %>%
     dplyr::mutate(
@@ -39,7 +58,7 @@ plot_qualite <- function(donnees_graphique, interactive = FALSE) {
         factor(levels = c("Diatomées", "Macrophytes", "Macroinvertébrés", "Poissons")),
       libelle_indice = libelle_indice |>
         factor(levels = c("IBD", "IBMR", "IPR", "I2M2", "IBG équivalent", "Invertébrés GCE"))
-      ) %>%
+    ) %>%
     dplyr::distinct(code_station_hydrobio, annee, libelle_support, libelle_indice, classe_indice) %>%
     dplyr::mutate(
       classe_indice = stringr::str_replace_na(classe_indice, "Non évalué") |>
@@ -60,7 +79,7 @@ plot_qualite <- function(donnees_graphique, interactive = FALSE) {
       position = ggplot2::position_stack(), alpha = .5
     ) +
     ggplot2::scale_fill_manual(
-      name = "",
+      name = "Classe de l'indicateur\nqualité",
       values = c(
         MAUVAIS = "#EE2C2C",
         MEDIOCRE = "#FF7F00",
@@ -71,11 +90,15 @@ plot_qualite <- function(donnees_graphique, interactive = FALSE) {
       )
     ) +
     ggplot2::labs(
+      title = paste0("Synthèse sur la sélection : ", titre_zone,
+                     "\nIndicateurs : ", indicateurs),
       x = "",
       y = "Nombre de stations"
     ) +
     ggplot2::theme_minimal() +
     ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 10, face = "bold", hjust = 0),
+      plot.margin = ggplot2::margin(t = 40),
       panel.grid.major.x = ggplot2::element_blank(),
       panel.grid.minor.x = ggplot2::element_blank(),
       axis.title = ggplot2::element_text(hjust = .95),
@@ -86,7 +109,7 @@ plot_qualite <- function(donnees_graphique, interactive = FALSE) {
 
   if (interactive) {
     (PlotQualite +
-      ggplot2::labs(y = "")) |>
+       ggplot2::labs(y = "")) |>
       plotly::ggplotly() %>%
       plotly::layout(
         showlegend = FALSE,

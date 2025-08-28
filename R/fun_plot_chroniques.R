@@ -92,7 +92,7 @@ plot_chroniques <- function(donnees_graphique, interactive = FALSE) {
       plotly::add_annotations(
         xref = "paper", yref = "paper",
         x = 1, y = -.175,
-        text = "Années de suivi",
+        text = "Nombre d'années de suivi",
         showarrow = FALSE
       ) %>%
       plotly::add_annotations(
